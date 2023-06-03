@@ -37,14 +37,13 @@ public class User implements BaseEntity<Long> {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;
 
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserPassenger> passengers = new ArrayList<>();
-
 
     public void setRole(Role role) {
         this.role = role;

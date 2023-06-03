@@ -25,7 +25,7 @@ public class Wagon implements BaseEntity<Long> {
     })
     private WagonInfo wagonInfo;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @ToString.Exclude
     @JoinColumn(name = "train_id", referencedColumnName = "id")
     private Train train;

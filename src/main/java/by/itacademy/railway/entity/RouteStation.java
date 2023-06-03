@@ -23,12 +23,12 @@ public class RouteStation implements BaseEntity<Long> {
     @Column(name = "arrival_time")
     private LocalDateTime arrivalTime;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @ToString.Exclude
     @JoinColumn(name = "route_id", referencedColumnName = "id", nullable = false)
     private Route route;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "station_id", referencedColumnName = "id", nullable = false)
     private Station station;
 

@@ -41,9 +41,9 @@ public class StationService {
     // TODO: 02.06.2023 доделать
     @Transactional
     public boolean remove(@Valid StationDto stationDto) {
-//        stationRepository.deleteByName(stationDto.getName());
-        stationRepository.deleteById(2); // работает
-        return stationRepository.existsByName(stationDto.getName());
+        stationRepository.deleteByName(stationDto.getName());
+//        stationRepository.deleteById(2); // работает
+        return !stationRepository.existsByName(stationDto.getName());
     }
 
 }

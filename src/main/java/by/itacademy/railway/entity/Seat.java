@@ -24,12 +24,12 @@ public class Seat implements BaseEntity<Long>{
     })
     private SeatInfo seatInfo;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @ToString.Exclude
     @JoinColumn(name = "wagon_id", referencedColumnName = "id")
     private Wagon wagon;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @ToString.Exclude
     @JoinColumn(name = "ticket_id", referencedColumnName = "id", unique = true)
     private Ticket ticket;

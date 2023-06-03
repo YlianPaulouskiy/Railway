@@ -22,11 +22,11 @@ public class Ticket implements BaseEntity<Long> {
     @OneToOne(mappedBy = "ticket")
     private Seat seat;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "passenger_id", referencedColumnName = "id")
     private Passenger passenger;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @ToString.Exclude
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;

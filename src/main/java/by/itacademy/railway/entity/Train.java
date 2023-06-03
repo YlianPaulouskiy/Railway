@@ -30,7 +30,7 @@ public class Train implements BaseEntity<Long> {
     })
     private TrainInfo trainInfo;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "route_id", referencedColumnName = "id", nullable = false, unique = true)
     private Route route;
 
