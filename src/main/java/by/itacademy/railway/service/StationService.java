@@ -1,10 +1,11 @@
 package by.itacademy.railway.service;
 
-import by.itacademy.railway.dto.StationDto;
+import by.itacademy.railway.dto.station.StationDto;
 import by.itacademy.railway.mapper.StationMapper;
 import by.itacademy.railway.repository.StationRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,9 +40,9 @@ public class StationService {
     }
 
     @Transactional
-    public boolean remove(@Valid StationDto stationDto) {
-        stationRepository.deleteByName(stationDto.getName());
-        return !stationRepository.existsByName(stationDto.getName());
+    public boolean remove(@NotBlank(message = "Station name can't be empty") String  stationName) {
+        stationRepository.deleteByName(stationName);
+        return !stationRepository.existsByName(stationName);
     }
 
 }

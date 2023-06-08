@@ -1,7 +1,7 @@
 package by.itacademy.railway.service;
 
 import by.itacademy.railway.annotation.IT;
-import by.itacademy.railway.dto.StationDto;
+import by.itacademy.railway.dto.station.StationDto;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,15 +26,11 @@ public class StationServiceIT {
     private static final String STATION_NAME = "Grodno";
     private static final String EXCEPTION_MESSAGE = "Station name is required";
     private StationDto createStationDto;
-    private StationDto removeStationDto;
 
     @BeforeEach
     void setUp() {
         createStationDto = StationDto.builder()
                 .name("Vitebsk")
-                .build();
-        removeStationDto = StationDto.builder()
-                .name(STATION_NAME)
                 .build();
     }
 
@@ -68,10 +64,10 @@ public class StationServiceIT {
     @Rollback
     void removeTest() {
         assertThat(stationService.findAll()).hasSize(DEFAULT_SIZE);
-        boolean isRemove = stationService.remove(removeStationDto);
+        boolean isRemove = stationService.remove(STATION_NAME);
         assertThat(isRemove).isTrue();
         assertThat(stationService.findAll()).hasSize(REMOVED_SIZE);
-        assertThat(stationService.findStationByName(removeStationDto.getName())).isEmpty();
+        assertThat(stationService.findStationByName(STATION_NAME)).isEmpty();
     }
 
     @Test
@@ -80,9 +76,7 @@ public class StationServiceIT {
         ConstraintViolationException exception =
                 assertThrows(ConstraintViolationException.class, () -> stationService.create(createStationDto));
         assertTrue(exception.getMessage().contains(EXCEPTION_MESSAGE));
-        removeStationDto.setName("");
-        exception = assertThrows(ConstraintViolationException.class, () -> stationService.remove(removeStationDto));
-        assertTrue(exception.getMessage().contains(EXCEPTION_MESSAGE));
+        assertThrows(ConstraintViolationException.class, () -> stationService.remove(""));
     }
 
 }
