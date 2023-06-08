@@ -18,11 +18,11 @@ public class UserPassenger implements BaseEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @ToString.Exclude
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "passenger_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "passenger_id", referencedColumnName = "id")
     private Passenger passenger;
 
 }

@@ -1,11 +1,11 @@
 package by.itacademy.railway.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -38,5 +38,10 @@ public class Passenger implements BaseEntity<Long>{
 
     @Column(name = "document_no", nullable = false)
     private String documentNo;
+
+    @Builder.Default
+    @ToString.Exclude
+    @OneToMany(mappedBy = "passenger", cascade = CascadeType.REMOVE)
+    private List<UserPassenger> users = new ArrayList<>();
 
 }
