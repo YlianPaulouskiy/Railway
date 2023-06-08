@@ -1,8 +1,8 @@
 package by.itacademy.railway.service;
 
 import by.itacademy.railway.annotation.IT;
-import by.itacademy.railway.dto.PassengerReadDto;
-import by.itacademy.railway.dto.PassengerStringDto;
+import by.itacademy.railway.dto.passenger.PassengerReadDto;
+import by.itacademy.railway.dto.passenger.PassengerStringDto;
 import by.itacademy.railway.entity.DocumentType;
 import by.itacademy.railway.entity.Gender;
 import by.itacademy.railway.mapper.PassengerMapper;

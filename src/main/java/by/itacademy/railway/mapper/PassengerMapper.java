@@ -1,7 +1,7 @@
 package by.itacademy.railway.mapper;
 
-import by.itacademy.railway.dto.PassengerReadDto;
-import by.itacademy.railway.dto.PassengerStringDto;
+import by.itacademy.railway.dto.passenger.PassengerReadDto;
+import by.itacademy.railway.dto.passenger.PassengerStringDto;
 import by.itacademy.railway.entity.Passenger;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

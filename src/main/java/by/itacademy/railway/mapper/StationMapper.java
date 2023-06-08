@@ -1,6 +1,6 @@
 package by.itacademy.railway.mapper;
 
-import by.itacademy.railway.dto.StationDto;
+import by.itacademy.railway.dto.station.StationDto;
 import by.itacademy.railway.entity.Station;
 import org.mapstruct.Mapper;
 

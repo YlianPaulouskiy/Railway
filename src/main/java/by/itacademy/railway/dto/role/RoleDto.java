@@ -1,4 +1,4 @@
-package by.itacademy.railway.dto;
+package by.itacademy.railway.dto.role;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

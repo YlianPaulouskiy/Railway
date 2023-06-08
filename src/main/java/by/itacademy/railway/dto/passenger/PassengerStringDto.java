@@ -1,4 +1,4 @@
-package by.itacademy.railway.dto;
+package by.itacademy.railway.dto.passenger;
 
 import by.itacademy.railway.entity.DocumentType;
 import by.itacademy.railway.entity.Gender;

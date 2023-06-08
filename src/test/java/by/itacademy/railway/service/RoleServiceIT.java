@@ -1,7 +1,7 @@
 package by.itacademy.railway.service;
 
 import by.itacademy.railway.annotation.IT;
-import by.itacademy.railway.dto.RoleDto;
+import by.itacademy.railway.dto.role.RoleDto;
 import by.itacademy.railway.repository.RoleRepository;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
@@ -23,16 +23,13 @@ public class RoleServiceIT {
     private static final Integer REMOVED_SIZE = DEFAULT_SIZE - 1;
     private static final String EXCEPTION_MESSAGE = "Role name is required";
     private RoleDto createdRoleDto;
-    private RoleDto removedRoleDto;
+    private static final String REMOVE_ROLE = "ADMIN";
 
 
     @BeforeEach
     void setUp() {
         createdRoleDto = RoleDto.builder()
                 .role("MANAGER")
-                .build();
-        removedRoleDto = RoleDto.builder()
-                .role("ADMIN")
                 .build();
     }
 
@@ -51,16 +48,14 @@ public class RoleServiceIT {
         ConstraintViolationException exception =
                 assertThrows(ConstraintViolationException.class, () -> roleService.create(createdRoleDto));
         assertTrue(exception.getMessage().contains(EXCEPTION_MESSAGE));
-        removedRoleDto.setRole("");
-        exception = assertThrows(ConstraintViolationException.class, () -> roleService.remove(removedRoleDto));
-        assertTrue(exception.getMessage().contains(EXCEPTION_MESSAGE));
+        assertThrows(ConstraintViolationException.class, () -> roleService.remove(""));
     }
 
     @Test
     @Rollback
     void removeTest() {
         assertThat(roleRepository.findAll()).hasSize(DEFAULT_SIZE);
-        boolean isRemove = roleService.remove(removedRoleDto);
+        boolean isRemove = roleService.remove(REMOVE_ROLE);
         assertThat(isRemove).isTrue();
         assertThat(roleRepository.findAll()).hasSize(REMOVED_SIZE);
     }
