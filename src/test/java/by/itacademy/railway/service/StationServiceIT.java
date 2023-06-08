@@ -68,7 +68,7 @@ public class StationServiceIT {
     @Rollback
     void removeTest() {
         assertThat(stationService.findAll()).hasSize(DEFAULT_SIZE);
-        boolean isRemove = stationService.remove(createStationDto);
+        boolean isRemove = stationService.remove(removeStationDto);
         assertThat(isRemove).isTrue();
         assertThat(stationService.findAll()).hasSize(REMOVED_SIZE);
         assertThat(stationService.findStationByName(removeStationDto.getName())).isEmpty();

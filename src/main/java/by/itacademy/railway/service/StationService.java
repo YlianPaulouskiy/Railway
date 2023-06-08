@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-// TODO: 01.06.2023 добавить валидацию и логирование
+// TODO: 01.06.2023 добавить логирование
 @Validated
 public class StationService {
 
@@ -38,11 +38,9 @@ public class StationService {
         return stationRepository.existsByName(stationDto.getName());
     }
 
-    // TODO: 02.06.2023 доделать
     @Transactional
     public boolean remove(@Valid StationDto stationDto) {
         stationRepository.deleteByName(stationDto.getName());
-//        stationRepository.deleteById(2); // работает
         return !stationRepository.existsByName(stationDto.getName());
     }
 
