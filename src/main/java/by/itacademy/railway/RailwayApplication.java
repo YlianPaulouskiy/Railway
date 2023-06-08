@@ -1,5 +1,6 @@
 package by.itacademy.railway;
 
+import by.itacademy.railway.dto.user.UserReadDto;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

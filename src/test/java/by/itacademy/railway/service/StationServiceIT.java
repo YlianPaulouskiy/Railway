@@ -59,7 +59,6 @@ public class StationServiceIT {
         assertThat(stationService.findStationByName(createStationDto.getName())).isPresent();
     }
 
-    // TODO: 02.06.2023 не работает
     @Test
     @Rollback
     void removeTest() {
