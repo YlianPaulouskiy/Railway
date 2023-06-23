@@ -18,6 +18,4 @@ public interface PassengerMapper {
 
     Passenger toModel(PassengerStringDto passengerStringDto);
 
-    List<PassengerReadDto> toListReadDto(List<Passenger> passengers);
-
 }

@@ -8,5 +8,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TrainService {
 
+    // TODO: 22.06.2023 TrainReadDto доделать
+    // TODO: 22.06.2023 TrainController доделать
+    // TODO: 22.06.2023 TrainService доделать
 
 }

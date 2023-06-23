@@ -1,9 +1,8 @@
 package by.itacademy.railway.service;
 
 import by.itacademy.railway.annotation.IT;
-import by.itacademy.railway.dto.role.RoleDto;
+import by.itacademy.railway.dto.role.RoleStringDto;
 import by.itacademy.railway.repository.RoleRepository;
-import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,14 +21,14 @@ public class RoleServiceIT {
     private static final Integer CREATED_SIZE = DEFAULT_SIZE + 1;
     private static final Integer REMOVED_SIZE = DEFAULT_SIZE - 1;
     private static final String EXCEPTION_MESSAGE = "Role name is required";
-    private RoleDto createdRoleDto;
-    private static final String REMOVE_ROLE = "ADMIN";
+    private RoleStringDto createdRoleDto;
+    private static final Integer REMOVE_ROLE_ID = 1;
 
 
     @BeforeEach
     void setUp() {
-        createdRoleDto = RoleDto.builder()
-                .role("MANAGER")
+        createdRoleDto = RoleStringDto.builder()
+                .name("MANAGER")
                 .build();
     }
 
@@ -37,25 +36,16 @@ public class RoleServiceIT {
     @Rollback
     void createTest() {
         assertEquals(DEFAULT_SIZE, roleRepository.findAll().size());
-        boolean isCreated = roleService.create(createdRoleDto);
-        assertTrue(isCreated);
+        var optionalRoleDto = roleService.create(createdRoleDto);
+        assertTrue(optionalRoleDto.isPresent());
         assertEquals(CREATED_SIZE, roleRepository.findAll().size());
-    }
-
-    @Test
-    void validationTest() {
-        createdRoleDto.setRole("");
-        ConstraintViolationException exception =
-                assertThrows(ConstraintViolationException.class, () -> roleService.create(createdRoleDto));
-        assertTrue(exception.getMessage().contains(EXCEPTION_MESSAGE));
-        assertThrows(ConstraintViolationException.class, () -> roleService.remove(""));
     }
 
     @Test
     @Rollback
     void removeTest() {
         assertThat(roleRepository.findAll()).hasSize(DEFAULT_SIZE);
-        boolean isRemove = roleService.remove(REMOVE_ROLE);
+        boolean isRemove = roleService.remove(REMOVE_ROLE_ID);
         assertThat(isRemove).isTrue();
         assertThat(roleRepository.findAll()).hasSize(REMOVED_SIZE);
     }

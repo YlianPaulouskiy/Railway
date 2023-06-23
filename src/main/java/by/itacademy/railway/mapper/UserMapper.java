@@ -1,7 +1,6 @@
 package by.itacademy.railway.mapper;
 
 import by.itacademy.railway.dto.user.UserReadDto;
-import by.itacademy.railway.dto.user.UserRoleDto;
 import by.itacademy.railway.dto.user.UserStringDto;
 import by.itacademy.railway.entity.User;
 import org.mapstruct.Mapper;
@@ -15,6 +14,6 @@ public interface UserMapper {
 
     UserReadDto toUserReadDto(User user);
 
-    List<UserRoleDto> toListUserRoleDto(List<User> users);
+    List<UserReadDto> toListUserRoleDto(List<User> users);
 
 }

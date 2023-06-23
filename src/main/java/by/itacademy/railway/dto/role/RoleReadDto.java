@@ -10,9 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RoleDto {
+public class RoleReadDto {
 
-    @NotBlank(message = "Role name is required")
-    private String role;
+    Integer id;
+
+    private String name;
 
 }

@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class StationDto {
+public class StationReadDto {
 
-    @NotBlank(message = "Station name is required")
+    private Integer id;
     private String name;
 
 }

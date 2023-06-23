@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PassengerReadDto {
 
+    private Long id;
     private String fio;
     private Gender gender;
     private DocumentType document;

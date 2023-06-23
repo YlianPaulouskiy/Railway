@@ -1,6 +1,7 @@
 package by.itacademy.railway.mapper;
 
-import by.itacademy.railway.dto.station.StationDto;
+import by.itacademy.railway.dto.station.StationReadDto;
+import by.itacademy.railway.dto.station.StationStringDto;
 import by.itacademy.railway.entity.Station;
 import org.mapstruct.Mapper;
 
@@ -9,10 +10,10 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface StationMapper {
 
-    StationDto toDto(Station station);
+    StationReadDto toDto(Station station);
 
-    List<StationDto> toListDto(List<Station> stations);
+    List<StationReadDto> toListDto(List<Station> stations);
 
-    Station toEntity(StationDto stationDto);
+    Station toEntity(StationStringDto stationStringDto);
 
 }

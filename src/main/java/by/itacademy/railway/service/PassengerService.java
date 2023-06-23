@@ -11,6 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 // TODO: 08.06.2023 доделать логирование
 @Service
 @Validated
@@ -20,19 +24,26 @@ public class PassengerService {
     private final PassengerRepository passengerRepository;
     private final PassengerMapper passengerMapper;
 
-    @Transactional
-    public boolean create(@Valid PassengerStringDto passengerStringDto) {
-        passengerRepository.save(passengerMapper.toModel(passengerStringDto));
-        return passengerRepository.existsByDocumentAndDocumentNo(passengerStringDto.getDocument(),
-                passengerStringDto.getDocumentNo());
+    @Transactional(readOnly = true)
+    public List<PassengerReadDto> findAllByUserId(Long id) {
+        return passengerRepository.findAllByUserId(id)
+                .stream()
+                .map(passengerMapper::toReadDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional
-    public boolean remove(@NotNull(message = "PassengerReadDto can't be null") PassengerReadDto passengerReadDto) {
-        passengerRepository.deleteByDocumentAndDocumentNo(passengerReadDto.getDocument(),
-                passengerReadDto.getDocumentNo());
-        return !passengerRepository.existsByDocumentAndDocumentNo(passengerReadDto.getDocument(),
-                passengerReadDto.getDocumentNo());
+    public Optional<PassengerReadDto> create(@Valid PassengerStringDto passengerStringDto) {
+        return Optional.ofNullable(
+                passengerMapper.toReadDto(
+                        passengerRepository.save(
+                                passengerMapper.toModel(passengerStringDto))));
+    }
+
+    @Transactional
+    public boolean remove(Long id) {
+        passengerRepository.deleteById(id);
+        return !passengerRepository.existsById(id);
     }
 
 }

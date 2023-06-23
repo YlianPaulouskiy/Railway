@@ -1,10 +1,8 @@
 package by.itacademy.railway.service;
 
-import by.itacademy.railway.dto.role.RoleDto;
+import by.itacademy.railway.dto.role.RoleReadDto;
 import by.itacademy.railway.dto.user.UserReadDto;
-import by.itacademy.railway.dto.user.UserRoleDto;
 import by.itacademy.railway.dto.user.UserStringDto;
-import by.itacademy.railway.entity.User;
 import by.itacademy.railway.mapper.UserMapper;
 import by.itacademy.railway.repository.RoleRepository;
 import by.itacademy.railway.repository.UserRepository;
@@ -14,9 +12,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -24,7 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import java.util.List;
 import java.util.Optional;
 
-// TODO: 08.06.2023 доделать логирование
+// TODO: 08.06.2023 доделать логирование переписать Dto
 @Service
 @Validated
 @RequiredArgsConstructor
@@ -35,7 +30,7 @@ public class UserService {
     private final UserMapper userMapper;
 
     @Transactional(readOnly = true)
-    public List<UserRoleDto> findAll() {
+    public List<UserReadDto> findAll() {
         return userMapper.toListUserRoleDto(userRepository.findAll());
     }
 
@@ -45,9 +40,14 @@ public class UserService {
     }
 
     @Transactional
-    public boolean create(@Valid UserStringDto userStringDto) {
-        userRepository.save(userMapper.toEntity(userStringDto));
-        return userRepository.existsByEmail(userStringDto.getEmail());
+    public Optional<UserReadDto> create(@Valid UserStringDto userStringDto) {
+        return Optional.ofNullable(
+                userMapper.toUserReadDto(
+                        userRepository.save(
+                                userMapper.toEntity(userStringDto)
+                        )
+                )
+        );
     }
 
     @Transactional
@@ -57,11 +57,10 @@ public class UserService {
     }
 
     @Transactional
-    public void updateRole(@NotNull(message = "User id can't be null") Long id,
-                           @Valid RoleDto roleDto) throws RoleNotFoundException, UserNotFoundException {
+    public void updateRole(Long id, RoleReadDto roleReadDto) throws RoleNotFoundException, UserNotFoundException {
         var optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
-            var optionalRole = roleRepository.findByRole(roleDto.getRole());
+            var optionalRole = roleRepository.findById(roleReadDto.getId());
             if (optionalRole.isPresent()) {
                 var user = optionalUser.get();
                 var role = optionalRole.get();
@@ -69,7 +68,7 @@ public class UserService {
                 userRepository.save(user);
                 roleRepository.save(role);
             } else {
-                throw new RoleNotFoundException(roleDto.getRole());
+                throw new RoleNotFoundException(roleReadDto.getName());
             }
         } else {
             throw new UserNotFoundException(id);

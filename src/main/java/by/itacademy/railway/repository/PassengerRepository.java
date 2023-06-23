@@ -1,14 +1,17 @@
 package by.itacademy.railway.repository;
 
-import by.itacademy.railway.entity.DocumentType;
 import by.itacademy.railway.entity.Passenger;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface PassengerRepository extends JpaRepository<Passenger, Long> {
 
-    boolean existsByDocumentAndDocumentNo(DocumentType document, String documentNo);
+    @Query("SELECT up.passenger FROM UserPassenger up WHERE up.user.id = :userId")
+    List<Passenger> findAllByUserId(@Param("userId") Long id);
 
-    void deleteByDocumentAndDocumentNo(DocumentType document, String documentNo);
 }

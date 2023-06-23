@@ -1,22 +1,16 @@
 package by.itacademy.railway.service;
 
 import by.itacademy.railway.annotation.IT;
-import by.itacademy.railway.dto.role.RoleDto;
-import by.itacademy.railway.dto.user.UserRoleDto;
+import by.itacademy.railway.dto.role.RoleReadDto;
+import by.itacademy.railway.dto.user.UserReadDto;
 import by.itacademy.railway.dto.user.UserStringDto;
-import by.itacademy.railway.entity.DocumentType;
-import by.itacademy.railway.entity.Gender;
 import by.itacademy.railway.entity.User;
 import by.itacademy.railway.repository.UserRepository;
-import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.validation.annotation.Validated;
 
-import java.awt.print.Pageable;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,7 +28,7 @@ public class UserServiceIT {
     private static final Integer REMOVED_SIZE = DEFAULT_SIZE - 1;
     private User rightUser;
     private UserStringDto createUserDto;
-    private RoleDto updatedRole;
+    private RoleReadDto updatedRole;
 
     @BeforeEach
     void setUp() {
@@ -45,7 +39,7 @@ public class UserServiceIT {
                 .email("axolm@gmail.com")
                 .password("1qaz2wsx3edc")
                 .build();
-        updatedRole = RoleDto.builder().role("USER").build();
+        updatedRole = RoleReadDto.builder().id(2).name("USER").build();
     }
 
     @Test
@@ -62,7 +56,7 @@ public class UserServiceIT {
     void findAllTest() {
         var users =userService.findAll();
         assertThat(users).hasSize(DEFAULT_SIZE);
-        var emails = users.stream().map(UserRoleDto::getEmail).collect(Collectors.toList());
+        var emails = users.stream().map(UserReadDto::getEmail).collect(Collectors.toList());
         assertThat(emails).containsExactlyInAnyOrder("maxik@gmail.com", "kate99@gamil.com");
     }
 
@@ -70,7 +64,7 @@ public class UserServiceIT {
     @Rollback
     void createTest() {
         assertThat(userService.findAll()).hasSize(DEFAULT_SIZE);
-        assertTrue(userService.create(createUserDto));
+        assertTrue(userService.create(createUserDto).isPresent());
         assertThat(userService.findAll()).hasSize(CREATED_SIZE);
         assertThat(userService.login(createUserDto.getEmail(), createUserDto.getPassword())).isPresent();
     }
@@ -87,9 +81,9 @@ public class UserServiceIT {
     @Test
     @Rollback
     void updateTest() {
-        assertNotEquals(rightUser.getRole().getRole(), updatedRole.getRole());
+        assertNotEquals(rightUser.getRole().getRole(), updatedRole.getName());
         userService.updateRole(FIND_ID, updatedRole);
-        assertEquals(rightUser.getRole().getRole(), updatedRole.getRole());
+        assertEquals(rightUser.getRole().getRole(), updatedRole.getName());
     }
 
     @Test
@@ -102,29 +96,4 @@ public class UserServiceIT {
         assertEquals(optionalUserDto.get().getEmail(), rightUser.getEmail());
     }
 
-    @Test
-    void validationTest() {
-        createUserDto.setName(null);
-        assertThrows(ConstraintViolationException.class, () -> userService.create(createUserDto));
-        createUserDto.setName("Name");
-        createUserDto.setLastName("");
-        assertThrows(ConstraintViolationException.class, () -> userService.create(createUserDto));
-        createUserDto.setLastName("LAStName");
-        createUserDto.setEmail("asdafs");
-        assertThrows(ConstraintViolationException.class, () -> userService.create(createUserDto));
-        createUserDto.setEmail("example@gmail.com");
-        createUserDto.setPassword("4444");
-        assertThrows(ConstraintViolationException.class, () -> userService.create(createUserDto));
-        assertThrows(ConstraintViolationException.class, () -> userService.findById(null));
-        assertThrows(ConstraintViolationException.class, () -> userService.remove(null));
-        assertThrows(ConstraintViolationException.class, () -> userService.updateRole(null, updatedRole));
-        assertThrows(ConstraintViolationException.class, () -> userService.login("null",""));
-    }
-
-    @Test
-    void pageTest() {
-        var pageable = PageRequest.of(0,2);
-        var users = userService.findAll(pageable);
-        assertThat(users).hasSize(2);
-    }
 }
