@@ -24,19 +24,26 @@ public class Seat implements BaseEntity<Long>{
     })
     private SeatInfo seatInfo;
 
+    @Column(nullable = false)
+    private Double cost;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @ToString.Exclude
     @JoinColumn(name = "wagon_id", referencedColumnName = "id")
     private Wagon wagon;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @ToString.Exclude
     @JoinColumn(name = "ticket_id", referencedColumnName = "id", unique = true)
     private Ticket ticket;
+
+    public void setWagon(Wagon wagon) {
+        this.wagon = wagon;
+        this.wagon.getSeats().add(this);
+    }
 
     public void setTicket(Ticket ticket) {
         this.ticket = ticket;
         this.ticket.setSeat(this);
     }
-
 }

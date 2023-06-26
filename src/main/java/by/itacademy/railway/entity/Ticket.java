@@ -9,20 +9,26 @@ import jakarta.persistence.*;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "tickets", schema ="public" )
+@EqualsAndHashCode(exclude = "id")
+@Table(name = "tickets", schema = "public")
 public class Ticket implements BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Double cost;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "from_id", referencedColumnName = "id")
+    private RouteStation from;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "to_id", referencedColumnName = "id")
+    private RouteStation to;
 
     @OneToOne(mappedBy = "ticket")
     private Seat seat;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "passenger_id", referencedColumnName = "id")
     private Passenger passenger;
 
@@ -30,4 +36,9 @@ public class Ticket implements BaseEntity<Long> {
     @ToString.Exclude
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
+
+    public void setOrder(Order order) {
+        this.order = order;
+        this.order.getTickets().add(this);
+    }
 }

@@ -6,13 +6,13 @@ public enum WagonType {
     RESERVED("Пдацкарт"),
     SITTING("Сидячий");
 
-    private final String  type;
+    private final String string;
 
-    WagonType(String type) {
-        this.type = type;
+    WagonType(String string) {
+        this.string = string;
     }
 
-    public String getType() {
-        return type;
+    public String getString() {
+        return string;
     }
 }

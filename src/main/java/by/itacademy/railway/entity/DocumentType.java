@@ -7,13 +7,13 @@ public enum DocumentType {
     WORK_ID_CARD("Рабочее удостоверение"),
     STUDENT_ID_CARD("Студенческий");
 
-    private final String type;
+    private final String string;
 
-    DocumentType(String type) {
-        this.type = type;
+    DocumentType(String string) {
+        this.string = string;
     }
 
-    public String getType() {
-        return type;
+    public String getString() {
+        return string;
     }
 }

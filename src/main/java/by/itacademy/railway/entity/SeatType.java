@@ -7,14 +7,14 @@ public enum SeatType {
     LOWER_SIDE("Нижнее боковое"),
     UPPER_SIDE("Верхнее боковое");
 
-    private final String type;
+    private final String string;
 
-    SeatType(String type) {
-        this.type = type;
+    SeatType(String string) {
+        this.string = string;
     }
 
-    public String getType() {
-        return type;
+    public String getString() {
+        return string;
     }
 
 }

@@ -41,7 +41,7 @@ public class Passenger implements BaseEntity<Long>{
 
     @Builder.Default
     @ToString.Exclude
-    @OneToMany(mappedBy = "passenger", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "passenger", cascade = CascadeType.ALL)
     private List<UserPassenger> users = new ArrayList<>();
 
 }

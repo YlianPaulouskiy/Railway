@@ -21,9 +21,4 @@ public class Role implements BaseEntity<Integer>{
     @Column(nullable = false, unique = true)
     private String role;
 
-    @ToString.Exclude
-    @Builder.Default
-    @OneToMany(mappedBy = "role", cascade = CascadeType.REMOVE)
-    private List<User> users = new ArrayList<>();
-
 }

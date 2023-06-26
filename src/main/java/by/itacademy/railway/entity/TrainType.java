@@ -7,14 +7,14 @@ public enum TrainType {
     URBAN("Гордские линии"),
     INTERNATIONAL("Международные линии");
 
-    private final String type;
+    private final String string;
 
-    TrainType(String type) {
-        this.type = type;
+    TrainType(String string) {
+        this.string = string;
     }
 
-    public String getType() {
-        return type;
+    public String getString() {
+        return string;
     }
 
 

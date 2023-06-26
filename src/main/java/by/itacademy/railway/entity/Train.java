@@ -30,23 +30,12 @@ public class Train implements BaseEntity<Long> {
     })
     private TrainInfo trainInfo;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "route_id", referencedColumnName = "id", nullable = false, unique = true)
-    private Route route;
+    @Builder.Default
+    @OneToMany(mappedBy = "train")
+    private List<RouteStation> routeStations = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "train", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "train")
     private List<Wagon> wagons = new ArrayList<>();
-
-    public void addWagons(Wagon... wagons) {
-        try {
-            for (Wagon wagon : wagons) {
-                this.wagons.add(wagon);
-                wagon.setTrain(this);
-            }
-        } catch (NullPointerException exception) {
-            exception.printStackTrace();
-        }
-    }
 
 }

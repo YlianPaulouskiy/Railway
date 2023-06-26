@@ -31,18 +31,11 @@ public class Wagon implements BaseEntity<Long> {
     private Train train;
 
     @Builder.Default
-    @OneToMany(mappedBy = "wagon", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "wagon")
     private List<Seat> seats = new ArrayList<>();
 
-    public void addSeats(Seat... seats) {
-        try {
-            for (Seat seat : seats) {
-                this.seats.add(seat);
-                seat.setWagon(this);
-            }
-        } catch (NullPointerException exception) {
-            exception.printStackTrace();
-        }
+    public void setTrain(Train train) {
+        this.train = train;
+        this.train.getWagons().add(this);
     }
-
 }

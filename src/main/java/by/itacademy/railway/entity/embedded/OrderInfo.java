@@ -22,9 +22,8 @@ public class OrderInfo {
     @Enumerated(value = EnumType.STRING)
     private OrderStatus status;
 
-    @Builder.Default
     @Convert(converter = TimeConverter.class)
-    private LocalDateTime registrationTime = LocalDateTime.now();
+    private LocalDateTime registrationTime;
 
     @Convert(converter = TimeConverter.class)
     private LocalDateTime payedTime;

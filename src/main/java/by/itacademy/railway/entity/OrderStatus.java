@@ -5,13 +5,13 @@ public enum OrderStatus {
     PAYED("Оплачен"),
     NEED_PAY("Требует оплаты");
 
-    private final String status;
+    private final String string;
 
-    OrderStatus(String status) {
-        this.status = status;
+    OrderStatus(String string) {
+        this.string = string;
     }
 
-    public String getStatus() {
-        return status;
+    public String getString() {
+        return string;
     }
 }

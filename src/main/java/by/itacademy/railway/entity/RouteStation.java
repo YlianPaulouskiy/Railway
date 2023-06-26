@@ -3,6 +3,7 @@ package by.itacademy.railway.entity;
 import lombok.*;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
 @Data
@@ -24,12 +25,16 @@ public class RouteStation implements BaseEntity<Long> {
     private LocalDateTime arrivalTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @ToString.Exclude
-    @JoinColumn(name = "route_id", referencedColumnName = "id", nullable = false)
-    private Route route;
+    @JoinColumn(name = "train_id", referencedColumnName = "id")
+    private Train train;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "station_id", referencedColumnName = "id", nullable = false)
     private Station station;
+
+    public void setTrain(Train train) {
+        this.train = train;
+        this.train.getRouteStations().add(this);
+    }
 
 }

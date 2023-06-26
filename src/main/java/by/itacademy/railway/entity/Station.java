@@ -20,10 +20,8 @@ public class Station implements BaseEntity<Integer>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @Column(nullable = false, unique = true)
     private String name;
-
-    @OneToMany(mappedBy = "station", cascade = CascadeType.REMOVE)
-    private List<RouteStation> routes;
 
 }

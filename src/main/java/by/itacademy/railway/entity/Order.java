@@ -39,17 +39,8 @@ public class Order implements BaseEntity<Long> {
     @OneToMany(mappedBy = "order")
     private List<Ticket> tickets = new ArrayList<>();
 
-    public void addTickets(Ticket... tickets) {
-        try {
-            for (Ticket ticket : tickets) {
-                this.tickets.add(ticket);
-                ticket.setOrder(this);
-            }
-        } catch (NullPointerException exception) {
-            exception.printStackTrace();
-        }
+    public void setUser(User user) {
+        this.user = user;
+        this.user.getOrders().add(this);
     }
-
-
-
 }

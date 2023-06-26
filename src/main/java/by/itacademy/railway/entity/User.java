@@ -34,7 +34,7 @@ public class User implements BaseEntity<Long> {
     private String password;
 
     @Builder.Default
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user")
     private List<Order> orders = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -44,11 +44,6 @@ public class User implements BaseEntity<Long> {
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserPassenger> passengers = new ArrayList<>();
-
-    public void setRole(Role role) {
-        this.role = role;
-        this.role.getUsers().add(this);
-    }
 
     public void addPassengers(Passenger... passengers) {
         try {
@@ -63,14 +58,4 @@ public class User implements BaseEntity<Long> {
         }
     }
 
-    public void addOrders(Order... orders) {
-        try {
-            for (Order order : orders) {
-                this.orders.add(order);
-                order.setUser(this);
-            }
-        } catch (NullPointerException exception) {
-            exception.printStackTrace();
-        }
-    }
 }
