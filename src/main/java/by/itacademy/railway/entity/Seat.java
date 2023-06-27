@@ -12,7 +12,7 @@ import jakarta.persistence.*;
 @Builder
 @Entity
 @Table(name = "seats", schema = "public")
-public class Seat implements BaseEntity<Long>{
+public class Seat implements BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,6 +44,8 @@ public class Seat implements BaseEntity<Long>{
 
     public void setTicket(Ticket ticket) {
         this.ticket = ticket;
-        this.ticket.setSeat(this);
+        if (this.ticket != null) {
+            this.ticket.setSeat(this);
+        }
     }
 }

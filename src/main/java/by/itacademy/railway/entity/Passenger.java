@@ -44,4 +44,10 @@ public class Passenger implements BaseEntity<Long>{
     @OneToMany(mappedBy = "passenger", cascade = CascadeType.ALL)
     private List<UserPassenger> users = new ArrayList<>();
 
+    @Builder.Default
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "passenger")
+    private List<Ticket> tickets = new ArrayList<>();
+
 }

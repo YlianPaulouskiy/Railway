@@ -5,6 +5,8 @@ import lombok.*;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -36,5 +38,17 @@ public class RouteStation implements BaseEntity<Long> {
         this.train = train;
         this.train.getRouteStations().add(this);
     }
+
+    @Builder.Default
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "from")
+    private List<Ticket> fromTickets = new ArrayList<>();
+
+    @Builder.Default
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "to")
+    private List<Ticket> toTickets = new ArrayList<>();
 
 }

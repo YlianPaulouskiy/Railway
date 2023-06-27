@@ -1,9 +1,9 @@
 package by.itacademy.railway.repository;
 
-import by.itacademy.railway.entity.Station;
+import by.itacademy.railway.entity.Seat;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface StationRepository extends JpaRepository<Station, Integer> {
+public interface SeatRepository extends JpaRepository<Seat, Long> {
 }

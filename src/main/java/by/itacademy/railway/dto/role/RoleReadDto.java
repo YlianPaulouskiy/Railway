@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class RoleReadDto {
 
-    Integer id;
+    private Integer id;
 
     private String name;
 

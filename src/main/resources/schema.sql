@@ -9,20 +9,13 @@ DROP TABLE IF EXISTS wagons;
 DROP TABLE IF EXISTS routes_stations;
 DROP TABLE IF EXISTS stations;
 DROP TABLE IF EXISTS trains;
-DROP TABLE IF EXISTS routes;
 
-
-CREATE TABLE routes
-(
-    id serial PRIMARY KEY
-);
 
 CREATE TABLE trains
 (
     id bigserial PRIMARY KEY,
     code       varchar(256) NOT NULL UNIQUE ,
-    type       varchar(256) NOT NULL, -- можно вынести в отдельную таблицу,
-    route_id bigint NOT NULL UNIQUE REFERENCES routes (id) ON UPDATE CASCADE ON DELETE CASCADE
+    type       varchar(256) NOT NULL -- можно вынести в отдельную таблицу
 );
 
 CREATE TABLE stations
@@ -34,8 +27,8 @@ CREATE TABLE stations
 CREATE TABLE routes_stations
 (
     id             bigserial PRIMARY KEY,
-    route_id       bigint NOT NULL REFERENCES routes (id) ON DELETE CASCADE,
     station_id     int    NOT NULL REFERENCES stations (id) ON DELETE CASCADE,
+    train_id bigint REFERENCES  trains(id) ON UPDATE CASCADE,
     departure_time timestamp,
     arrival_time   timestamp
 );
@@ -45,8 +38,8 @@ CREATE TABLE wagons
     id         bigserial PRIMARY KEY,
     no         smallint     NOT NULL,
     type       varchar(128) NOT NULL, -- можно вынести в отдельную таблицу
-    train_code varchar(256) NOT NULL REFERENCES trains (code) ON UPDATE CASCADE ON DELETE CASCADE,
-    UNIQUE (no, train_code)
+    train_id bigint NOT NULL REFERENCES trains (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    UNIQUE (no, train_id)
 );
 
 CREATE TABLE roles
@@ -97,7 +90,8 @@ CREATE TABLE orders
 CREATE TABLE tickets
 (
     id       bigserial PRIMARY KEY,
-    cost     decimal(8, 2) NOT NULL,
+    from_id bigint REFERENCES routes_stations(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    to_id bigint REFERENCES routes_stations(id) ON UPDATE CASCADE ON DELETE CASCADE,
     order_id bigint REFERENCES orders (id) ON UPDATE CASCADE ON DELETE CASCADE,
     passenger_id bigint REFERENCES passengers(id)
 );
@@ -106,6 +100,7 @@ CREATE TABLE seats
 (
     id        bigserial PRIMARY KEY,
     no        smallint      NOT NULL,
+    cost decimal(8,2) NOT NULL,
     type      varchar(256)  NOT NULL, -- можно вынести в отдельную таблицу
     wagon_id  bigint        NOT NULL REFERENCES wagons (id) ON UPDATE CASCADE ON DELETE CASCADE,
     ticket_id bigint UNIQUE REFERENCES tickets (id) ON UPDATE CASCADE ON DELETE SET NULL

@@ -1,12 +1,10 @@
 package by.itacademy.railway.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -15,7 +13,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "stations", schema = "public")
-public class Station implements BaseEntity<Integer>{
+public class Station implements BaseEntity<Integer> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,5 +21,11 @@ public class Station implements BaseEntity<Integer>{
 
     @Column(nullable = false, unique = true)
     private String name;
+
+    @Builder.Default
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "station")
+    private List<RouteStation> routeStations = new ArrayList<>();
 
 }

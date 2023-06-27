@@ -3,6 +3,7 @@ package by.itacademy.railway.service;
 import by.itacademy.railway.dto.role.RoleReadDto;
 import by.itacademy.railway.dto.user.UserReadDto;
 import by.itacademy.railway.dto.user.UserStringDto;
+import by.itacademy.railway.entity.Order;
 import by.itacademy.railway.mapper.UserMapper;
 import by.itacademy.railway.repository.RoleRepository;
 import by.itacademy.railway.repository.UserRepository;
@@ -19,7 +20,7 @@ import org.springframework.validation.annotation.Validated;
 import java.util.List;
 import java.util.Optional;
 
-// TODO: 08.06.2023 доделать логирование переписать Dto
+// TODO: 08.06.2023 доделать логирование
 @Service
 @Validated
 @RequiredArgsConstructor
@@ -27,6 +28,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final OrderService orderService;
     private final UserMapper userMapper;
 
     @Transactional(readOnly = true)
@@ -41,17 +43,14 @@ public class UserService {
 
     @Transactional
     public Optional<UserReadDto> create(@Valid UserStringDto userStringDto) {
-        return Optional.ofNullable(
-                userMapper.toUserReadDto(
-                        userRepository.save(
-                                userMapper.toEntity(userStringDto)
-                        )
-                )
-        );
+        var user = userRepository.save(userMapper.toEntity(userStringDto));
+        roleRepository.findByRole("USER").ifPresent(user::setRole);
+        return Optional.ofNullable(userMapper.toUserReadDto(user));
     }
 
     @Transactional
     public boolean remove(@NotNull(message = "User id can't be null") Long id) {
+        deleteAllOrdersWhichLinkedAtUser(id);
         userRepository.deleteById(id);
         return !userRepository.existsById(id);
     }
@@ -81,4 +80,15 @@ public class UserService {
         return userRepository.login(email, password).map(userMapper::toUserReadDto);
     }
 
+    /**
+     * Удаляет заказы которые ссылаются на текущего пользователя
+     *
+     * @param id идентификационный номер заказа
+     */
+    private void deleteAllOrdersWhichLinkedAtUser(Long id) {
+        userRepository.findById(id).ifPresent(user -> user.getOrders()
+                .stream()
+                .map(Order::getId)
+                .forEach(orderService::remove));
+    }
 }

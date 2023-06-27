@@ -21,4 +21,10 @@ public class Role implements BaseEntity<Integer>{
     @Column(nullable = false, unique = true)
     private String role;
 
+    @Builder.Default
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "role")
+    private List<User> users = new ArrayList<>();
+
 }

@@ -2,8 +2,10 @@ package by.itacademy.railway.service;
 
 import by.itacademy.railway.dto.passenger.PassengerReadDto;
 import by.itacademy.railway.dto.passenger.PassengerStringDto;
+import by.itacademy.railway.entity.Ticket;
 import by.itacademy.railway.mapper.PassengerMapper;
 import by.itacademy.railway.repository.PassengerRepository;
+import by.itacademy.railway.repository.TicketRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 public class PassengerService {
 
     private final PassengerRepository passengerRepository;
+    private final TicketService ticketService;
     private final PassengerMapper passengerMapper;
 
     @Transactional(readOnly = true)
@@ -41,9 +44,22 @@ public class PassengerService {
     }
 
     @Transactional
-    public boolean remove(Long id) {
+    public boolean remove(@NotNull(message = "User id can't be null") Long id) {
+        deleteTicketWhichLinkedAtPassenger(id);
         passengerRepository.deleteById(id);
         return !passengerRepository.existsById(id);
+    }
+
+    /**
+     * Удаляет ссылающие билеты на текущего пассажира
+     *
+     * @param id идентификационный номер пассажира
+     */
+    private void deleteTicketWhichLinkedAtPassenger(Long id) {
+        passengerRepository.findById(id).ifPresent(passenger -> passenger.getTickets()
+                .stream()
+                .map(Ticket::getId)
+                .forEach(ticketService::remove));
     }
 
 }
