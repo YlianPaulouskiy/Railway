@@ -22,6 +22,7 @@ public class RailwayApplication {
     public static void main(String[] args) {
         var context = SpringApplication.run(RailwayApplication.class);
         initDb(context);
+        // TODO: 28.06.2023 доделать сервисы и поиск всех элементов для работы с меню, т.е. поиск заказов, passengers по ид юсера  
     }
 
     private static void initDb(ConfigurableApplicationContext context) {

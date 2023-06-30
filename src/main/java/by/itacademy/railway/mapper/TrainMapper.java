@@ -1,15 +1,25 @@
 package by.itacademy.railway.mapper;
 
+import by.itacademy.railway.dto.train.TrainReadDto;
 import by.itacademy.railway.dto.train.TrainSearchDto;
 import by.itacademy.railway.entity.RouteStation;
 import by.itacademy.railway.entity.Train;
 import by.itacademy.railway.entity.Wagon;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 
 import java.time.LocalDateTime;
 
 @Mapper(componentModel = "spring")
 public abstract class TrainMapper {
+
+    @Mappings({
+            @Mapping(target = "code", expression = "java(train.getTrainInfo().getCode())"),
+            @Mapping(target = "type", expression = "java(train.getTrainInfo()" +
+                                                   ".getType().getString())")
+    })
+    public abstract TrainReadDto toReadDto(Train train);
 
     public TrainSearchDto toSearchDto(Train train, String from, String to) {
         return TrainSearchDto.builder()

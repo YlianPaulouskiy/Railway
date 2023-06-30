@@ -13,12 +13,15 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 // TODO: 08.06.2023 доделать логирование
 @Service
@@ -33,7 +36,13 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public List<UserReadDto> findAll() {
-        return userMapper.toListUserRoleDto(userRepository.findAll());
+        return userRepository.findAll().stream()
+                .map(userMapper::toUserReadDto).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public Page<UserReadDto> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable).map(userMapper::toUserReadDto);
     }
 
     @Transactional(readOnly = true)

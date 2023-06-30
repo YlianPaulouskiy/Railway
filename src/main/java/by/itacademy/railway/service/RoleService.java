@@ -5,7 +5,6 @@ import by.itacademy.railway.dto.role.RoleStringDto;
 import by.itacademy.railway.entity.User;
 import by.itacademy.railway.mapper.RoleMapper;
 import by.itacademy.railway.repository.RoleRepository;
-import by.itacademy.railway.repository.UserRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 // TODO: 03.06.2023 доделать log
 @Service
@@ -25,10 +26,15 @@ public class RoleService {
     private final UserService userService;
     private final RoleMapper roleMapper;
 
+    @Transactional(readOnly = true)
+    public List<RoleReadDto> findAll() {
+        return roleRepository.findAll().stream().map(roleMapper::toReadDto).collect(Collectors.toList());
+    }
+
     @Transactional
     public Optional<RoleReadDto> create(@Valid RoleStringDto roleStringDto) {
         return Optional.ofNullable(
-                roleMapper.toDto(
+                roleMapper.toReadDto(
                         roleRepository.save(
                                 roleMapper.toEntity(roleStringDto))));
     }

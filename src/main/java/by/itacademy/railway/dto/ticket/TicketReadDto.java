@@ -1,7 +1,8 @@
 package by.itacademy.railway.dto.ticket;
 
 import by.itacademy.railway.dto.passenger.PassengerReadDto;
-import by.itacademy.railway.dto.seat.SeatTicketDto;
+import by.itacademy.railway.dto.seat.SeatReadDto;
+import by.itacademy.railway.dto.station.route.RouteStationReadDto;
 import lombok.*;
 
 @Value
@@ -9,8 +10,9 @@ import lombok.*;
 public class TicketReadDto {
 
     Long id;
-    Double cost;
+    RouteStationReadDto from;
+    RouteStationReadDto to;
     PassengerReadDto passenger;
-    SeatTicketDto seat;
+    SeatReadDto seat;
 
 }

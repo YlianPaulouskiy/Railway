@@ -27,6 +27,7 @@ public class RouteStation implements BaseEntity<Long> {
     private LocalDateTime arrivalTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
     @JoinColumn(name = "train_id", referencedColumnName = "id")
     private Train train;
 

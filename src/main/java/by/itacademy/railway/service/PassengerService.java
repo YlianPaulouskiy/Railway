@@ -9,6 +9,8 @@ import by.itacademy.railway.repository.TicketRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -29,10 +31,14 @@ public class PassengerService {
 
     @Transactional(readOnly = true)
     public List<PassengerReadDto> findAllByUserId(Long id) {
-        return passengerRepository.findAllByUserId(id)
-                .stream()
-                .map(passengerMapper::toReadDto)
-                .collect(Collectors.toList());
+        return passengerRepository.findAllByUserId(id).stream()
+                .map(passengerMapper::toReadDto).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public Page<PassengerReadDto> findAllByUserId(Long id, Pageable pageable) {
+        return passengerRepository.findAllByUserId(id, pageable)
+                .map(passengerMapper::toReadDto);
     }
 
     @Transactional
@@ -44,7 +50,16 @@ public class PassengerService {
     }
 
     @Transactional
-    public boolean remove(@NotNull(message = "User id can't be null") Long id) {
+    public Optional<PassengerReadDto> update(@NotNull(message = "Passenger id can't be null")Long id, @Valid PassengerStringDto passengerStringDto) {
+        var passenger = passengerMapper.toModel(passengerStringDto);
+        passenger.setId(id);
+        passengerRepository.save(passenger);
+        passengerRepository.flush();
+        return Optional.of(passengerMapper.toReadDto(passenger));
+    }
+
+    @Transactional
+    public boolean remove(@NotNull(message = "Passenger id can't be null") Long id) {
         deleteTicketWhichLinkedAtPassenger(id);
         passengerRepository.deleteById(id);
         return !passengerRepository.existsById(id);

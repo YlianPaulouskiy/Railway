@@ -13,6 +13,6 @@ public interface RoleMapper {
     Role toEntity(RoleStringDto roleStringDto);
 
     @Mapping(source = "role", target = "name")
-    RoleReadDto toDto(Role role);
+    RoleReadDto toReadDto(Role role);
 
 }

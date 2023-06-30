@@ -4,7 +4,7 @@ import lombok.*;
 
 @Value
 @Builder
-public class TrainTicketDto {
+public class TrainReadDto {
 
     Long id;
     String code;

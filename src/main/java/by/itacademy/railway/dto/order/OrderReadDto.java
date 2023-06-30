@@ -16,6 +16,7 @@ import java.util.List;
 public class OrderReadDto {
 
     private Long id;
+    private String no;
     private String status;
     private LocalDateTime registrationTime;
     private LocalDateTime payedTime;
